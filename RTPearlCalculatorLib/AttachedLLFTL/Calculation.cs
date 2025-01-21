@@ -33,7 +33,7 @@ namespace RTPearlCalculatorLib.AttachedLLFTL
             }
         }
 
-        public static void CalculateSuitableAttachLocation(int maxTick , Direction direction , int minChunkDistance , int maxChunkDistance)
+        public static void CalculateSuitableAttachLocation(int maxTick , Direction direction , int minChunkDistance , int maxChunkDistance, PearlEntity.BehaviorVersion version)
         {
             PearlEntity pearl = PearlCalculatorLib.General.Data.Pearl.DeepClone();
             Space3D NorthWestTNT = PearlCalculatorLib.General.Data.NorthWestTNT;
@@ -49,7 +49,7 @@ namespace RTPearlCalculatorLib.AttachedLLFTL
                 PearlCalculatorLib.General.Data.NorthEastTNT = NorthEastTNT;
                 PearlCalculatorLib.General.Data.SouthWestTNT = SouthWestTNT;
                 PearlCalculatorLib.General.Data.SouthEastTNT = SouthEastTNT;
-                PearlCalculatorLib.General.Calculation.CalculateTNTAmount(maxTick , 0.5);
+                PearlCalculatorLib.General.Calculation.CalculateTNTAmount(maxTick , 0.5 , version);
                 List<TNTCalculationResult> possileResult = PearlCalculatorLib.General.Data.TNTResult.Where(t =>
                 {
                     switch(direction)

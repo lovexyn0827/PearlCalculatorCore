@@ -59,7 +59,7 @@ namespace PearlCalculatorCP.ViewModels
 
         public Space3D PearlMomentum => new(_momentumX, _momentumY, _momentumZ);
 
-        public PearlEntity Pearl => new(PearlMomentum, PearlPos);
+        public PearlEntity Pearl => PearlEntity.instantatePearl(MainWindowViewModel.PearlVersion, PearlMomentum, PearlPos);
 
 
         private double _aTX;
@@ -146,7 +146,7 @@ namespace PearlCalculatorCP.ViewModels
         public void CalculateAmount()
         {
             var data = CreateManuallyData();
-            if (Calculation.CalculateTNTAmount(data, MainWindowViewModel.MaxTicks, MainWindowViewModel.MaxDistance, out var result))
+            if (Calculation.CalculateTNTAmount(data, MainWindowViewModel.MaxTicks, MainWindowViewModel.MaxDistance, out var result, MainWindowViewModel.PearlVersion))
             {
                 EventManager.PublishEvent(this, "calculate", new CalculateTNTAmountArgs(PublishKey, result));
                 var angle = data.Pearl.Position.WorldAngle(data.Destination.ToSpace3D());
@@ -163,7 +163,7 @@ namespace PearlCalculatorCP.ViewModels
         public void CalculateTrace()
         {
             var data = CreateManuallyData();
-            var entities = Calculation.CalculatePearlTrace(data, MainWindowViewModel.MaxTicks);
+            var entities = Calculation.CalculatePearlTrace(data, MainWindowViewModel.MaxTicks, MainWindowViewModel.PearlVersion);
             var chunks = ListCoverterUtility.ToChunk(entities);
 
             var traces = new List<PearlTraceModel>(entities.Count);
@@ -185,7 +185,7 @@ namespace PearlCalculatorCP.ViewModels
         public void CalculateMomentum()
         {
             var data = CreateManuallyData();
-            var entities = Calculation.CalculatePearlTrace(data, MainWindowViewModel.MaxTicks);
+            var entities = Calculation.CalculatePearlTrace(data, MainWindowViewModel.MaxTicks, MainWindowViewModel.PearlVersion);
             var traces = new List<PearlTraceModel>(entities.Count);
             traces.AddRange(entities.Select((t, i) => new PearlTraceModel
             {

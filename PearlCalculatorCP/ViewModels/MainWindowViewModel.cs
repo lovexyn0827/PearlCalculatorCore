@@ -6,6 +6,7 @@ using Avalonia;
 using PearlCalculatorCP.Models;
 using PearlCalculatorCP.Utils;
 using PearlCalculatorLib.General;
+using PearlCalculatorLib.PearlCalculationLib.Entity;
 using PearlCalculatorLib.PearlCalculationLib.Utility;
 using PearlCalculatorLib.PearlCalculationLib.World;
 using PearlCalculatorLib.Settings;
@@ -54,6 +55,7 @@ namespace PearlCalculatorCP.ViewModels
 
         public static int MaxTicks { get; set; } = 100;
         public static double MaxDistance { get; set; } = 10;
+        public static PearlEntity.BehaviorVersion PearlVersion = PearlEntity.BehaviorVersion.LEGACY;
 
 #region GeneralFTL General Input Data
         
@@ -210,7 +212,7 @@ namespace PearlCalculatorCP.ViewModels
         {
             try
             {
-                if (Calculation.CalculateTNTAmount(MaxTicks, MaxDistance))
+                if (Calculation.CalculateTNTAmount(MaxTicks, MaxDistance, PearlVersion))
                 {
                     EventManager.PublishEvent(this, "calculate", new CalculateTNTAmountArgs("GeneralFTL", Data.TNTResult));
                     ShowDirectionResult(Data.Pearl.Position, Data.Destination);
@@ -236,7 +238,7 @@ namespace PearlCalculatorCP.ViewModels
         {
             try
             {
-                var entities = Calculation.CalculatePearlTrace((int)RedTNT, (int)BlueTNT, MaxTicks, Direction);
+                var entities = Calculation.CalculatePearlTrace((int)RedTNT, (int)BlueTNT, MaxTicks, Direction, PearlVersion);
                 var chunks = ListCoverterUtility.ToChunk(entities);
             
                 var traces = new List<PearlTraceModel>(entities.Count);

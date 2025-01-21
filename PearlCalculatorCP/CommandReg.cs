@@ -28,6 +28,11 @@ namespace PearlCalculatorCP
                 "change MaxDistance"
             });
 
+            CommandManager.Register("changePearlVersion", new ChangePearlVersion(), new List<string>
+            {
+                "change PearlVersion"
+            });
+
             CommandManager.Register("clear", new Clear(), null);
             
             CommandManager.Register("changeLang", new ChangeLanguage(), null);

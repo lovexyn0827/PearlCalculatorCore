@@ -19,7 +19,7 @@ namespace PearlCalculatorLib.Manually
     public static class Calculation
     {
 
-        public static bool CalculateTNTAmount(ManuallyData data , int ticks , double maxDistance , out List<TNTCalculationResult> result)
+        public static bool CalculateTNTAmount(ManuallyData data , int ticks , double maxDistance , out List<TNTCalculationResult> result , PearlEntity.BehaviorVersion version)
         {
             Space3D vectorA = VectorCalculation.CalculateMotion(data.Pearl.Position , data.ATNT);
             Space3D vectorB = VectorCalculation.CalculateMotion(data.Pearl.Position , data.BTNT);
@@ -41,10 +41,10 @@ namespace PearlCalculatorLib.Manually
                 if(distance.IsClockWise(vectorA.ToSurface2D()) ^ distance.IsCounterClockWise(vectorB.ToSurface2D()))
                     return CalculateSingleTNTAmount(data , vectorA , vectorB , ticks , out result);
                 else
-                    return CalculateDualTNTAmount(data , vectorA , vectorB , ticks , maxDistance , out result);
+                    return CalculateDualTNTAmount(data , vectorA , vectorB , ticks , maxDistance , out result , version);
             }
             else if(Math.Abs(angleA - angleB) < Math.PI / 2)
-                return CalculateDualTNTAmount(data , vectorA , vectorB , ticks , maxDistance , out result);
+                return CalculateDualTNTAmount(data , vectorA , vectorB , ticks , maxDistance , out result , version);
             else
                 return false;
         }
@@ -130,7 +130,7 @@ namespace PearlCalculatorLib.Manually
             return true;
         }
 
-        private static bool CalculateDualTNTAmount(ManuallyData data , Space3D vectorA , Space3D vectorB , int ticks , double maxDistance , out List<TNTCalculationResult> result)
+        private static bool CalculateDualTNTAmount(ManuallyData data , Space3D vectorA , Space3D vectorB , int ticks , double maxDistance , out List<TNTCalculationResult> result , PearlEntity.BehaviorVersion version)
         {
             int aTNT , bTNT;
             double denominator, trueA, trueB;
@@ -168,7 +168,7 @@ namespace PearlCalculatorLib.Manually
                 
                     for(int b = -5; b <= 5; b++)
                     {
-                        PearlEntity aPearl = PearlSimulation(aTNT + a , bTNT + b , i , vectorA , vectorB , new PearlEntity(data.Pearl));
+                        PearlEntity aPearl = PearlSimulation(aTNT + a , bTNT + b , i , vectorA , vectorB , PearlEntity.instantatePearl(version, data.Pearl));
                         Surface2D displacement = aPearl.Position.ToSurface2D() - data.Destination;
 
                         if(displacement.AxialDistanceLessOrEqualTo(maxDistance) && bTNT + b > 0 && aTNT + a > 0)
@@ -221,20 +221,20 @@ namespace PearlCalculatorLib.Manually
             };
         }
 
-        public static List<Entity> CalculatePearlTrace(ManuallyData data , int ticks)
+        public static List<Entity> CalculatePearlTrace(ManuallyData data , int ticks, PearlEntity.BehaviorVersion version)
         {
             Space3D aTNTVector = VectorCalculation.CalculateMotion(data.Pearl.Position , data.ATNT);
             Space3D bTNTVector = VectorCalculation.CalculateMotion(data.Pearl.Position , data.BTNT);
-            PearlEntity pearl = new PearlEntity(data.Pearl);
+            PearlEntity pearl = PearlEntity.instantatePearl(version, data.Pearl);
             List<Entity> pearlTrace = new List<Entity>();
             
             pearl.Motion += data.ATNTAmount * aTNTVector + data.BTNTAmount * bTNTVector;
-            pearlTrace.Add(new PearlEntity(pearl));
+            pearlTrace.Add(PearlEntity.instantatePearl(version, pearl));
             
             for(int i = 0; i < ticks; i++)
             {
                 pearl.Tick();
-                pearlTrace.Add(new PearlEntity(pearl)); ;
+                pearlTrace.Add(PearlEntity.instantatePearl(version, pearl));
             }
             
             return pearlTrace;

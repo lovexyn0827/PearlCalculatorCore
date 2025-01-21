@@ -10,10 +10,13 @@ namespace PearlCalculatorLib.General
 {
     public static class Calculation
     {
-        private static PearlEntity PearlSimulation(int redTNT , int blueTNT , int ticks , Direction direction)
+        private static PearlEntity PearlSimulation(int redTNT , int blueTNT , int ticks , Direction direction, PearlEntity.BehaviorVersion version)
         {
             //Simulating the pearl and return the end point
-            PearlEntity pearlEntity = new PearlEntity(Data.Pearl).AddPosition(Data.PearlOffset);
+            PearlEntity pearlEntity = PearlEntity.instantatePearl(version);
+            pearlEntity.Position = Data.Pearl.Position;
+            pearlEntity.Motion = Data.Pearl.Motion;
+            pearlEntity.AddPosition(Data.PearlOffset);
 
             CalculateTNTVector(direction , out Space3D redTNTVector , out Space3D blueTNTVector);
             
@@ -36,7 +39,7 @@ namespace PearlCalculatorLib.General
         /// <para>TNT combination result will be stored into <see cref="Data.TNTResult"/></para>
         /// </returns>
         /// <exception cref="ArgumentException"></exception>
-        public static bool CalculateTNTAmount(int maxTicks , double maxDistance)
+        public static bool CalculateTNTAmount(int maxTicks , double maxDistance, PearlEntity.BehaviorVersion version)
         {
             int redTNT, blueTNT;
             double trueRed, trueBlue;
@@ -62,7 +65,7 @@ namespace PearlCalculatorLib.General
             for(int tick = 1; tick <= maxTicks; tick++)
             {
                 //Factorization trueDistance to make a easier calculation
-                divider += Math.Pow(0.99 , tick - 1);
+                divider += Math.Pow(0.99 , (version >= PearlEntity.BehaviorVersion.POST_1212) ? tick : tick - 1);
 
                 redTNT = Convert.ToInt32(trueRed / divider);
                 blueTNT = Convert.ToInt32(trueBlue / divider);
@@ -75,7 +78,7 @@ namespace PearlCalculatorLib.General
                     for(int b = -5; b <= 5; b++)
                     {
                         //Simulate the pearl and get it's end point
-                        PearlEntity pearlEntity = PearlSimulation(redTNT + r , blueTNT + b , tick , direction);
+                        PearlEntity pearlEntity = PearlSimulation(redTNT + r , blueTNT + b , tick , direction, version);
                         
                         //Only the pearl with a difference smaller than 5 will pass the check
                         if((pearlEntity.Position - Data.Destination).ToSurface2D().Absolute() <= maxDistance)
@@ -121,19 +124,20 @@ namespace PearlCalculatorLib.General
         /// <param name="direction">The accelerating Direction of the Ender Pearl. Only Allow North, South, East, West</param>
         /// <returns>Return A List of Entity contains the Motion and Position in each Ticks</returns>
         /// <exception cref="ArgumentException"></exception>
-        public static List<Entity> CalculatePearlTrace(int redTNT , int blueTNT , int ticks , Direction direction)
+        public static List<Entity> CalculatePearlTrace(int redTNT , int blueTNT , int ticks , Direction direction, PearlEntity.BehaviorVersion version)
         {
             List<Entity> result = new List<Entity>(ticks + 1);
-            PearlEntity pearl = new PearlEntity(Data.Pearl.AddPosition(Data.PearlOffset));
-            
+            PearlEntity pearl = PearlEntity.instantatePearl(version);
+            pearl.Position = Data.Pearl.AddPosition(Data.PearlOffset).Position;
+
             CalculateTNTVector(direction , out Space3D redTNTVector , out Space3D blueTNTVector);
             pearl.Motion += redTNT * redTNTVector + blueTNT * blueTNTVector;
-            result.Add(new PearlEntity(pearl));
+            result.Add(pearl.DeepClone());
             
             for(int i = 0; i < ticks; i++)
             {
                 pearl.Tick();
-                result.Add(new PearlEntity(pearl));
+                result.Add(pearl.DeepClone());
             }
             
             return result;

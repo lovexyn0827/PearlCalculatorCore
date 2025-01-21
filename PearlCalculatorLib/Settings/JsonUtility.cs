@@ -113,11 +113,12 @@ namespace PearlCalculatorLib.Settings
                 cannon.SouthEastTNT = ReadSpace3D(root.GetProperty(nameof(cannon.SouthEastTNT)));
 
                 var pearlElemRoot = root.GetProperty(nameof(cannon.Pearl));
-                cannon.Pearl = new PearlCalculatorLib.PearlCalculationLib.Entity.PearlEntity
-                {
-                    Position = ReadSpace3D(pearlElemRoot.GetProperty(nameof(cannon.Pearl.Position))) ,
-                    Motion = ReadSpace3D(pearlElemRoot.GetProperty(nameof(cannon.Pearl.Motion)))
-                };
+                cannon.Pearl = PearlCalculatorLib.PearlCalculationLib.Entity.PearlEntity.instantatePearl
+                (
+                    cannon.PearlVersion, 
+                    ReadSpace3D(pearlElemRoot.GetProperty(nameof(cannon.Pearl.Position))),
+                    ReadSpace3D(pearlElemRoot.GetProperty(nameof(cannon.Pearl.Motion)))
+                );
                 
                 cannon.Offset = ReadSurface2D(root.GetProperty(nameof(cannon.Offset)));
 

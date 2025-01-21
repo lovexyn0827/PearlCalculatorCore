@@ -45,6 +45,8 @@ namespace PearlCalculatorLib.General
         /// </summary>
         public static Space3D Destination { get; set; } = new Space3D();
 
+        public static PearlEntity.BehaviorVersion PearlVersion = PearlEntity.BehaviorVersion.LEGACY;
+
 
 
         /// <summary>
@@ -52,7 +54,7 @@ namespace PearlCalculatorLib.General
         /// <para>Note : X and Z should be the gobal coordinate of the lava pool center</para>
         /// <para>Required for All Calculation in <see cref="Calculation"/></para>
         /// </summary>
-        public static PearlEntity Pearl { get; set; } = new PearlEntity().WithPosition(0 , 170.34722638929412 , 0).WithMotion(0 , 0.2716278719434352 , 0);
+        public static PearlEntity Pearl { get; set; } = new LegacyPearlEntity().WithPosition(0 , 170.34722638929412 , 0).WithMotion(0 , 0.2716278719434352 , 0);
 
 
 
@@ -192,6 +194,7 @@ namespace PearlCalculatorLib.General
             DefaultRedDuper = Direction.SouthEast;
             DefaultBlueDuper = Direction.NorthWest;
             PearlOffset = new Surface2D();
+            PearlVersion = PearlEntity.BehaviorVersion.LEGACY;
         }
     }
 }

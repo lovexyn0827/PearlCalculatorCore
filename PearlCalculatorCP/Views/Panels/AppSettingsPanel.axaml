@@ -99,6 +99,15 @@
                           IsChecked="{Binding EnableChunkMode}" />
         </DockPanel>
 
+		<DockPanel Height="40">
+			<TextBlock Text="{i18n:Translate McVersion,Fallback='MC Version'}" />
+
+			<ComboBox DockPanel.Dock="Right" HorizontalAlignment="Right" Margin="0,0,-12,0" 
+					  SelectedIndex="0" 
+					  MaxDropDownHeight="120" 
+					  Items = "{Binding PearlVersions}" SelectedItem="{Binding PearlVersion}" />
+		</DockPanel>
+
     </StackPanel>
     
 </UserControl>

@@ -49,10 +49,10 @@ namespace PCCSettingsGenerator
             Console.ReadKey();
             Settings settings = new Settings
             {
-                Pearl = new PearlEntity() ,
+                Pearl = PearlEntity.instantatePearl(PearlEntity.BehaviorVersion.LEGACY) ,
                 Offset = new Surface2D()
             };
-            PearlEntity pearl = new PearlEntity();
+            PearlEntity pearl = PearlEntity.instantatePearl(PearlEntity.BehaviorVersion.LEGACY);
             Surface2D chamber = new Surface2D();
 
             #endregion

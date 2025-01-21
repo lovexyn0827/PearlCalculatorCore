@@ -27,6 +27,7 @@ namespace PearlCalculatorLib.General
         public Direction Direction;
         public Direction DefaultRedTNTDirection;
         public Direction DefaultBlueTNTDirection;
+        public PearlEntity.BehaviorVersion PearlVersion;
 
         public static Settings CreateSettingsFormData() => new Settings()
         {
@@ -47,7 +48,8 @@ namespace PearlCalculatorLib.General
             Direction = Data.Direction ,
 
             DefaultRedTNTDirection = Data.DefaultRedDuper ,
-            DefaultBlueTNTDirection = Data.DefaultBlueDuper
+            DefaultBlueTNTDirection = Data.DefaultBlueDuper,
+            PearlVersion = Data.PearlVersion
         };
     }
 }

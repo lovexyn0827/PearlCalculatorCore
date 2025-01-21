@@ -11,7 +11,7 @@ namespace RTPearlCalculatorLib.AttachedLLFTL
     {
         public static Stack<TNTAndRequireButtonBlockResult> LLFTLResult = new Stack<TNTAndRequireButtonBlockResult>();
 
-        public static PearlEntity OriginalPearl = new PearlEntity().
+        public static PearlEntity OriginalPearl = PearlEntity.instantatePearl(PearlEntity.BehaviorVersion.LEGACY).
             WithPosition(0 , 170.34722638929408 , 0).
             WithMotion(0 , 0.2716278719434352 , 0);
 

@@ -42,11 +42,13 @@ namespace PearlCalculatorWFA
 
             var pearlElemRoot = rootElement.GetProperty(nameof(settings.Pearl));
 
-            settings.Pearl = new PearlEntity
-            {
-                Position = ReadSpace3D(pearlElemRoot.GetProperty(nameof(settings.Pearl.Position))),
-                Motion = ReadSpace3D(pearlElemRoot.GetProperty(nameof(settings.Pearl.Motion)))
-            };
+            settings.PearlVersion = (PearlEntity.BehaviorVersion)pearlElemRoot.GetProperty(nameof(settings.PearlVersion)).GetByte();
+            settings.Pearl = PearlEntity.instantatePearl
+            (
+                settings.PearlVersion, 
+                ReadSpace3D(pearlElemRoot.GetProperty(nameof(settings.Pearl.Position))),
+                ReadSpace3D(pearlElemRoot.GetProperty(nameof(settings.Pearl.Motion)))
+            );
 
             {
                 settings.DefaultRedTNTDirection =
@@ -88,7 +90,8 @@ namespace PearlCalculatorWFA
                 writer.WriteNumber("X", o.X);
                 writer.WriteNumber("Z", o.Z);
             });
-            
+
+            writer.WriteNumber(nameof(value.PearlVersion), (byte)value.PearlVersion);
             WriteObject(writer, options, nameof(value.Pearl), ref value.Pearl, o =>
             {
                 WriteObject(writer, options, nameof(o.Position), ref o.Position, _space3DJsonConverter);

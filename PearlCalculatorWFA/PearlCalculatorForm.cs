@@ -13,6 +13,7 @@ using System.Drawing;
 using System.Text;
 using System.Text.Json;
 using PearlCalculatorLib.PearlCalculationLib.Entity;
+using System.Drawing.Printing;
 
 namespace PearlCalculatorWFA
 {
@@ -33,12 +34,13 @@ namespace PearlCalculatorWFA
             Converters = { JsonConverter }
         };
 
-        private ManuallyData manuallyData = new ManuallyData(0 , 0 , Space3D.Zero , Space3D.Zero , Surface2D.Zero , new PearlEntity().WithMotion(0 , 0 , 0).WithPosition(0 , 0 , 0));
+        private ManuallyData manuallyData = new ManuallyData(0 , 0 , Space3D.Zero , Space3D.Zero , Surface2D.Zero , PearlEntity.instantatePearl(PearlEntity.BehaviorVersion.LEGACY).WithMotion(0 , 0 , 0).WithPosition(0 , 0 , 0));
 
         private bool IsDisplayOnTNT = false;
         private int MaxTicks = 100;
         private int ManuallyAtntAmount = 0;
         private int ManuallyBtntAmount = 0;
+        private PearlEntity.BehaviorVersion PearlVersion = PearlEntity.BehaviorVersion.LEGACY;
 
         public PearlCalculatorWFA()
         {
@@ -92,7 +94,7 @@ namespace PearlCalculatorWFA
         private void CalculateTNTButton_Click(object sender , EventArgs e)
         {
             Log("Main" , "Msg" , "Calculate TNT");
-            if(GeneralCalculation.CalculateTNTAmount(MaxTicks , 10))
+            if(GeneralCalculation.CalculateTNTAmount(MaxTicks , 10, PearlVersion))
             {
                 Log("Main" , "Msg" , "TNT calculated");
                 DisplayTNTAmount(false);
@@ -112,7 +114,7 @@ namespace PearlCalculatorWFA
         private void PearlSimulate()
         {
             Log("Main" , "Msg" , "Caluete pearl trace");
-            DisplayPearTrace(GeneralCalculation.CalculatePearlTrace(GeneralData.RedTNT , GeneralData.BlueTNT , MaxTicks , GeneralData.Direction));
+            DisplayPearTrace(GeneralCalculation.CalculatePearlTrace(GeneralData.RedTNT , GeneralData.BlueTNT , MaxTicks , GeneralData.Direction , PearlVersion));
             IsDisplayOnTNT = false;
         }
 
@@ -768,7 +770,7 @@ namespace PearlCalculatorWFA
         private void ManuallyCalculateTNTAmount()
         {
             List<TNTCalculationResult> tntResult;
-            if(ManuallyCalculation.CalculateTNTAmount(manuallyData , MaxTicks , 10 , out tntResult))
+            if(ManuallyCalculation.CalculateTNTAmount(manuallyData , MaxTicks , 10 , out tntResult, PearlVersion))
             {
                 Log("Main" , "Msg" , "Reset display");
                 BasicOutputSystem.Items.Clear();
@@ -802,7 +804,7 @@ namespace PearlCalculatorWFA
 
         private void ManuallyCalculatePearlTrace()
         {
-            List<Entity> pearlTrace = ManuallyCalculation.CalculatePearlTrace(manuallyData , MaxTicks);
+            List<Entity> pearlTrace = ManuallyCalculation.CalculatePearlTrace(manuallyData , MaxTicks, PearlVersion);
             Log("Main" , "Msg" , "Display pearl trace");
             Log("Main" , "Msg" , "Clear display");
             BasicOutputSystem.Items.Clear();
@@ -831,7 +833,7 @@ namespace PearlCalculatorWFA
         private void ManuallyCalculatePearlMomemtum()
         {
 #pragma warning disable CS0117 // 'Calculation' 未包含 'CalculatePearl' 的定義
-            List<Entity> pearlTrace = ManuallyCalculation.CalculatePearlTrace(manuallyData , MaxTicks);
+            List<Entity> pearlTrace = ManuallyCalculation.CalculatePearlTrace(manuallyData , MaxTicks, PearlVersion);
 #pragma warning restore CS0117 // 'Calculation' 未包含 'CalculatePearl' 的定義
             Log("Main" , "Msg" , "Display pearl momemtum");
             Log("Main" , "Msg" , "Clear display");
@@ -1149,7 +1151,7 @@ namespace PearlCalculatorWFA
                     break;
                 case "cmd.general.calculate.tnt":
                     Log("Main" , "Msg" , "Calculate TNT");
-                    if(GeneralCalculation.CalculateTNTAmount(MaxTicks , 10))
+                    if(GeneralCalculation.CalculateTNTAmount(MaxTicks , 10, PearlVersion))
                     {
                         Log("Main" , "Msg" , "TNT calculated");
                         DisplayTNTAmount(false);
@@ -1165,12 +1167,12 @@ namespace PearlCalculatorWFA
                     break;
                 case "cmd.general.calculate.pearl.trace":
                     Log("Main" , "Msg" , "Caluting pearl trace");
-                    DisplayPearTrace(GeneralCalculation.CalculatePearlTrace(GeneralData.RedTNT , GeneralData.BlueTNT , MaxTicks , GeneralData.Direction));
+                    DisplayPearTrace(GeneralCalculation.CalculatePearlTrace(GeneralData.RedTNT , GeneralData.BlueTNT , MaxTicks , GeneralData.Direction, PearlVersion));
                     IsDisplayOnTNT = false;
                     break;
                 case "cmd.general.calculate.pearl.momemtum":
                     Log("Main" , "Msg" , "Calculating pearl momemtum");
-                    DisplayPearlMomemtum(GeneralCalculation.CalculatePearlTrace(GeneralData.RedTNT , GeneralData.BlueTNT , MaxTicks , GeneralData.Direction));
+                    DisplayPearlMomemtum(GeneralCalculation.CalculatePearlTrace(GeneralData.RedTNT , GeneralData.BlueTNT , MaxTicks , GeneralData.Direction, PearlVersion));
                     IsDisplayOnTNT = false;
                     break;
                 case "cmd.manually.calculate.tnt":

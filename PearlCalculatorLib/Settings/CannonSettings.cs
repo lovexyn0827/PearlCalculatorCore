@@ -26,6 +26,7 @@ namespace PearlCalculatorLib.Settings
 
         public List<int> RedTNTConfiguration { get; set; }
         public List<int> BlueTNTConfiguration { get; set; }
+        public PearlEntity.BehaviorVersion PearlVersion;
         
         public CannonSettings DeepClone()
         {
@@ -48,7 +49,8 @@ namespace PearlCalculatorLib.Settings
                 Offset               = Offset,
                 Pearl                = Pearl.DeepClone(),
                 RedTNTConfiguration  = redTNTConfiguration,
-                BlueTNTConfiguration = blueTNTConfiguration
+                BlueTNTConfiguration = blueTNTConfiguration, 
+                PearlVersion         = PearlVersion
             };
 
             return result;

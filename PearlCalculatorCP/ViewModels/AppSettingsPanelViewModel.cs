@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using PearlCalculatorCP.Localizer;
 using PearlCalculatorCP.Models;
+using PearlCalculatorLib.PearlCalculationLib.Entity;
 using ReactiveUI;
 
 namespace PearlCalculatorCP.ViewModels
@@ -17,6 +18,18 @@ namespace PearlCalculatorCP.ViewModels
                 EventManager.PublishEvent(this, "switchChunkMode", new SwitchChunkModeArgs("AppSettings", value));
             }
         }
+        private PearlEntity.BehaviorVersion _pearlVersion = PearlEntity.BehaviorVersion.LEGACY;
+        public PearlEntity.BehaviorVersion PearlVersion
+        {
+            get => _pearlVersion;
+            set
+            {
+                this.RaiseAndSetIfChanged(ref _pearlVersion, value);
+                CommandManager.Instance.ExecuteCommand($"changePearlVersion {value}");
+            }
+        }
+
+        public PearlEntity.BehaviorVersion[] PearlVersions { get; } = { PearlEntity.BehaviorVersion.LEGACY, PearlEntity.BehaviorVersion.POST_1205, PearlEntity.BehaviorVersion.POST_1212 };
 
         public List<LanguageComboBoxItemModel> Languages { get; private set; }
 

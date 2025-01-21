@@ -31,15 +31,15 @@
         <vm:CustomFTLViewModel />
     </UserControl.DataContext>
     
-    <Grid RowDefinitions="5, *, 5">
+    <Grid RowDefinitions="Auto, Auto, Auto">
         <Border Grid.Row="1" Classes="GlobalGeneralBorder" Padding="12,6,12,0">
-            <Grid RowDefinitions="*, Auto">
-                
-                <Grid  Grid.Row="0" RowDefinitions="3*,*,*,*,*,*,*" DockPanel.Dock="Top">
-                    
+            <Grid RowDefinitions="Auto, Auto, Auto">
+				
+                <Grid  Grid.Row="1" RowDefinitions="3*,*,*,*,*,*,*" DockPanel.Dock="Top">
+					
                     <Grid Grid.Row="0" ColumnDefinitions="*, 4, *">
-                        
-                        <!--Pearl XYZ-->
+
+						<!--Pearl XYZ-->
                         <UniformGrid Grid.Column="0" Columns="1">
                             <StackPanel Margin="4">
                                 <TextBlock Text="{i18n:Translate PearlPosX, Fallback='Pearl X :'}" Classes="InputBoxTB" />
@@ -126,7 +126,7 @@
                     
                 </Grid>
                 
-                <StackPanel Grid.Row="1" Spacing="2" Margin="0, 4">
+                <StackPanel Grid.Row="2" Spacing="2" Margin="0, 4">
                     
                     <Button Classes="GeneralButtonStyle" 
                             Content="{i18n:Translate CalculateTNTAmount, Fallback='Calculate TNT Amount'}" 

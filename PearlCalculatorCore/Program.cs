@@ -38,9 +38,9 @@ namespace PearlCalculatorCore
             };
             
             string json = JsonUtility.Serialize(settingsCollection);
-            File.WriteAllText(@"G:\json.json" , json);
+            File.WriteAllText(@"D:\json.json" , json);
             
-            string text = File.ReadAllText(@"G:\json.json");
+            string text = File.ReadAllText(@"D:\json.json");
             SettingsCollection collection = JsonUtility.DeSerialize(text);
         }
     }
