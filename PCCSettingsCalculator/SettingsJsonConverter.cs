@@ -43,9 +43,9 @@ namespace PCCSettingsGenerator
             var pearlElemRoot = rootElement.GetProperty(nameof(settings.Pearl));
 
             settings.Pearl = PearlEntity.instantatePearl(
-                PearlEntity.BehaviorVersion.LEGACY, 
-                ReadSpace3D(pearlElemRoot.GetProperty(nameof(settings.Pearl.Position))) ,
-                ReadSpace3D(pearlElemRoot.GetProperty(nameof(settings.Pearl.Motion)))
+                PearlEntity.BehaviorVersion.LEGACY,
+                ReadSpace3D(pearlElemRoot.GetProperty(nameof(settings.Pearl.Motion))), 
+                ReadSpace3D(pearlElemRoot.GetProperty(nameof(settings.Pearl.Position)))
             );
 
             {

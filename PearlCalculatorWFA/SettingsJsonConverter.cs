@@ -46,8 +46,8 @@ namespace PearlCalculatorWFA
             settings.Pearl = PearlEntity.instantatePearl
             (
                 settings.PearlVersion, 
-                ReadSpace3D(pearlElemRoot.GetProperty(nameof(settings.Pearl.Position))),
-                ReadSpace3D(pearlElemRoot.GetProperty(nameof(settings.Pearl.Motion)))
+                ReadSpace3D(pearlElemRoot.GetProperty(nameof(settings.Pearl.Motion))),
+                ReadSpace3D(pearlElemRoot.GetProperty(nameof(settings.Pearl.Position)))
             );
 
             {

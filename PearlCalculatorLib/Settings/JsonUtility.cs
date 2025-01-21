@@ -115,9 +115,9 @@ namespace PearlCalculatorLib.Settings
                 var pearlElemRoot = root.GetProperty(nameof(cannon.Pearl));
                 cannon.Pearl = PearlCalculatorLib.PearlCalculationLib.Entity.PearlEntity.instantatePearl
                 (
-                    cannon.PearlVersion, 
-                    ReadSpace3D(pearlElemRoot.GetProperty(nameof(cannon.Pearl.Position))),
-                    ReadSpace3D(pearlElemRoot.GetProperty(nameof(cannon.Pearl.Motion)))
+                    PearlCalculationLib.Entity.PearlEntity.BehaviorVersion.LEGACY, 
+                    ReadSpace3D(pearlElemRoot.GetProperty(nameof(cannon.Pearl.Motion))),
+                    ReadSpace3D(pearlElemRoot.GetProperty(nameof(cannon.Pearl.Position)))
                 );
                 
                 cannon.Offset = ReadSurface2D(root.GetProperty(nameof(cannon.Offset)));
